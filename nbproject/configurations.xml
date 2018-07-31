@@ -4,14 +4,15 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Arquivos de Cabeçalho"
                    projectFiles="true">
+      <itemPath>Pixel.h</itemPath>
+      <itemPath>definitions.h</itemPath>
+      <itemPath>main.h</itemPath>
+      <itemPath>mygl.h</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Arquivos de Código-Fonte"
                    projectFiles="true">
-      <itemPath>definitions.h</itemPath>
       <itemPath>main.cpp</itemPath>
-      <itemPath>main.h</itemPath>
-      <itemPath>mygl.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Arquivos de Recurso"
@@ -42,6 +43,8 @@
           <commandLine>-lglut32 -lopengl32 -Wl,--subsystem,windows</commandLine>
         </linkerTool>
       </compileType>
+      <item path="Pixel.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="definitions.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
@@ -71,6 +74,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Pixel.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="definitions.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">

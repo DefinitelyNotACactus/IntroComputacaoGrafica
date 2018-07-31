@@ -1,7 +1,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include <GL/glext.h> //Necessário para o uso de GL_CLAMP_TO_EDGE em Windows
+#include <GL/glext.h> //Needed for GL_CLAMP_TO_EDGE in Windows systems
 #include <iostream>
 
 #include "definitions.h"

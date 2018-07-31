@@ -2,68 +2,45 @@
 #define _MYGL_H_
 
 #include "definitions.h"
+#include "Pixel.h"
 
 //*****************************************************************************
 // Defina aqui as suas funções gráficas
 //*****************************************************************************
-class Color{
-    
-public:
-    int r, g, b, a;
-    
-    Color(int r, int g, int b, int a){
-        this->r = r;
-        this->g = g;
-        this->b = b;
-        this->a = a;
-    }
-};
-
-class Pair{
-    
-public:
-    int x, y;
-    
-    Pair(int x, int y){
-        this->x = x;
-        this->y = y;
-    }
-};
 
 /**
  * Rasterizes a single pixel in the video memory
- * @param *xy The coordinated pair of this pixel
- * @param *clr The Color of this pixel 
+ * @param *pxl The pixel to be drawn 
  */
-void PutPixel(Pair *pair, Color *clr){
-    FBptr[pair->x*4 + pair->y*4*IMAGE_WIDTH + 0]  = clr->r;
-    FBptr[pair->x*4 + pair->y*4*IMAGE_WIDTH + 1]  = clr->g;
-    FBptr[pair->x*4 + pair->y*4*IMAGE_WIDTH + 2]  = clr->b;
-    FBptr[pair->x*4 + pair->y*4*IMAGE_WIDTH + 3]  = clr->a;
+void PutPixel(Pixel *pxl){
+    FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 0]  = pxl->getR();
+    FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 1]  = pxl->getG();
+    FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 2]  = pxl->getB();
+    FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 3]  = pxl->getA();
 }
 
 /**
  * Rasterizes a line in the window, using the Bresenham algorithm
  * @todo The other 7 regions
  */
-void DrawLine(Pair *pair0, Pair *pair1, Color *clr0, Color *clr1){
-    int dx = pair1->x - pair0->x;
-    int dy = pair1->y - pair0->y;
+void DrawLine(Pixel *pxli, Pixel *pxlf){
+    int dx = pxlf->getX() - pxli->getX();
+    int dy = pxlf->getY() - pxli->getY();
     int d = 2 * dy - dx;
     int incr_e = 2 * dy;
     int incr_ne = 2 * (dy - dx);
-    Pair newPair(pair0->x, pair0->y);
-    PutPixel(&newPair, clr1);
-    while(newPair.x < pair1->x){
+    Pixel newPixel = *pxli;
+    PutPixel(&newPixel);
+    while(newPixel.getX() < pxlf->getY()){
         if(d <= 0) {
             d += incr_e;
-            newPair.x++;
+            newPixel.incrementX();
         } else {
             d += incr_ne;
-            newPair.x++;
-            newPair.y++;
+            newPixel.incrementX();
+            newPixel.incrementY();
         }
-        PutPixel(&newPair, clr1);
+        PutPixel(&newPixel);
     }
 }
 #endif // _MYGL_H_
