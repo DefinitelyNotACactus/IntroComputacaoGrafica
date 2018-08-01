@@ -24,23 +24,55 @@ void PutPixel(Pixel *pxl){
  * @todo The other 7 regions
  */
 void DrawLine(Pixel *pxli, Pixel *pxlf){
-    int dx = pxlf->getX() - pxli->getX();
-    int dy = pxlf->getY() - pxli->getY();
-    int d = 2 * dy - dx;
-    int incr_e = 2 * dy;
-    int incr_ne = 2 * (dy - dx);
+    int d, incr_e, incr_ne, dx, dy;
     Pixel newPixel = *pxli;
-    PutPixel(&newPixel);
-    while(newPixel.getX() < pxlf->getY()){
-        if(d <= 0) {
-            d += incr_e;
-            newPixel.incrementX();
-        } else {
-            d += incr_ne;
-            newPixel.incrementX();
-            newPixel.incrementY();
+    //PutPixel(&newPixel);
+    dx = abs(pxlf->getX() - newPixel.getX());
+    dy = abs(pxlf->getY() - newPixel.getY());
+    if(dx >= dy){
+        d = 2 * dy - dx;
+        incr_e = 2 * dy;
+        incr_ne = 2 * (dy - dx);
+        while(newPixel.getX() != pxlf->getX()){
+            if(d <= 0) {
+                d += incr_e;
+            } else {
+                d += incr_ne;
+                if(pxli->getY() > pxlf->getY()){
+                    newPixel.decrementY();
+                } else {
+                    newPixel.incrementY();
+                }
+            }
+            if(pxli->getX() > pxlf->getX()){
+                newPixel.decrementX();
+            } else {
+                newPixel.incrementX();
+            }
+            PutPixel(&newPixel);
         }
-        PutPixel(&newPixel);
+    } else {
+        d = 2 * dx - dy;
+        incr_e = 2 * dx;
+        incr_ne = 2 * (dx - dy);
+        while(newPixel.getY() != pxlf->getY()){
+            if(d <= 0) {
+                d += incr_e;
+            } else {
+                d += incr_ne;
+                if(pxli->getX() > pxlf->getX()){
+                    newPixel.decrementX();
+                } else {
+                    newPixel.incrementX();
+                }
+            }
+            if(pxli->getY() > pxlf->getY()){
+                newPixel.decrementY();
+            } else {
+                newPixel.incrementY();
+            }
+            PutPixel(&newPixel);
+        }
     }
 }
 #endif // _MYGL_H_

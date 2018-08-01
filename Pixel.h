@@ -29,8 +29,24 @@ public:
         x++;
     }
     
+    void decrementX(){
+        x--;
+    }
+    
+    void setX(int newX){
+        x = newX;
+    }
+    
     void incrementY(){
         y++;
+    }
+    
+    void decrementY(){
+        y--;
+    }
+    
+    void setY(int newY){
+        y = newY;
     }
     
     int getR(){
