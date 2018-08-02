@@ -21,7 +21,8 @@ void PutPixel(Pixel *pxl){
 
 /**
  * Rasterizes a line in the window, using the Bresenham algorithm
- * @todo The other 7 regions
+ * @param *pxli The starting pixel
+ * @param *pxlf The last pixel
  */
 void DrawLine(Pixel *pxli, Pixel *pxlf){
     int d, incr_e, incr_ne, dx, dy;
@@ -75,5 +76,18 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){
         }
     }
 }
+
+/**
+ * Rasterizes a triangle in the window by calling the DrawLine function for the three pixels.
+ * @param pxla
+ * @param pxlb
+ * @param pxlc
+ */
+void DrawTriangle(Pixel *pxla, Pixel *pxlb, Pixel *pxlc){
+    DrawLine(pxla, pxlb);
+    DrawLine(pxla, pxlc);
+    DrawLine(pxlb, pxlc);
+}
+
 #endif // _MYGL_H_
 

@@ -18,6 +18,10 @@ void MyGlDraw(void)
     Pixel pxl8(511, 0, 0, 0, 255, 255);
     Pixel pxl9(255, 0, 0, 0, 255, 255);
 
+    Pixel pxla(100, 120, 255, 255, 255, 255);
+    Pixel pxlb(450, 300, 255, 255, 255, 255);
+    Pixel pxlcc(190, 200, 255, 255, 255, 255);
+    
     DrawLine(&pxl2, &pxlc);
     DrawLine(&pxl3, &pxlc);
     DrawLine(&pxl4, &pxlc);
@@ -27,6 +31,7 @@ void MyGlDraw(void)
     DrawLine(&pxl8, &pxlc);
     DrawLine(&pxl9, &pxlc);
     
+    DrawTriangle(&pxla, &pxlb, &pxlcc);
 }
 
 //-----------------------------------------------------------------------------
