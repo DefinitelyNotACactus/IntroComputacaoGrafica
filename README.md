@@ -47,7 +47,7 @@ PutPixel(&pxl2);
 ```
 And the output:
 
-[logo]: https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/screenshots/img001.png "Image 1"
+[logo]: https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/screenshots/img001.png "Image 1"
 
 ### Function DrawLine
 This function receives two Pixels and draws a line between them using the Bresenham algorithm. The version of the algorithm seen on class had some limitations, for instance it was limited to slopes where <b>0<=m<=1</b>, thus, the 8th octant. Here's the early version of the code:
@@ -75,7 +75,7 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){
 }
 ```
 
-[logo]: https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/screenshots/octants.png  "Octants"
+[logo]: https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/screenshots/octants.png  "Octants"
 
 
 (To be continued)
