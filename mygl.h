@@ -27,7 +27,7 @@ void PutPixel(Pixel *pxl){
 void DrawLine(Pixel *pxli, Pixel *pxlf){
     int d, incr_e, incr_ne, dx, dy;
     Pixel newPixel = *pxli;
-    //PutPixel(&newPixel);
+    PutPixel(&newPixel);
     dx = abs(pxlf->getX() - newPixel.getX());
     dy = abs(pxlf->getY() - newPixel.getY());
     if(dx >= dy){
