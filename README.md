@@ -2,10 +2,7 @@
 
 ## T1 - Rasterization
 #### Introduction
-For this task, we have implemented algorithms to rasterize pixels, lines and triangles on the screen, as per Foley et. al rasterization is:
->Approximation of mathematical ('ideal') primitives, described in terms of vertices on a Cartesian grid, by sets of pixels of the appropriate intensity of gray or color.
-
-Current operating systems blocks users from modifying the memory directly, and therefore, a framework was provided by the teacher to simulate access to the video memory using OpenGL.
+For this task, we have implemented algorithms to rasterize pixels, lines and triangles on the screen, to simulate access to the video memory a framework was provided by the teacher using OpenGL and GLUT toolkit.
 
 ### Requirements
 
@@ -14,3 +11,5 @@ Current operating systems blocks users from modifying the memory directly, and t
 > * A C/C++ compiler
 
 ###### Note: In terms of environment, we've used Windows operating system and NetBeans IDE with MinGW compiler.
+
+### Function PutPixel
