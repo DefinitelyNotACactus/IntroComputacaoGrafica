@@ -25,7 +25,7 @@ This function calculates the offset and draws a single pixel on the screen. A pi
  
  Since every color channel occupies one byte and the RGBA color scheme is composed of four channels we have to increment the position by one in order to access the next color channel:
  
- ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/screenshots/pixel.png)
+ ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/pixel.png)
  Thus, the FBptr needs to be called four times and the function changes to:
  ```C++
  void PutPixel(Pixel *pxl){
@@ -62,13 +62,13 @@ PutPixel(&pxl2);
 ```
 And the output:
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/screenshots/img001.png "Image 1")
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/img001.png "Image 1")
 
 ### Function DrawLine
 This function receives two pixels and draws a line between them using the Bresenham algorithm.
 The Bresenham algorithm calculates the position of the next pixel to be drawn using midpoint criteria (Consider a line that intersects two pixels columns, for each column there are two pixels that are closer to the line, one above and the other below):
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/screenshots/line.png "")
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/line.png "")
 
 To decide between them, a decision variable d is used:
 ```C++
@@ -103,11 +103,11 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){//parameters changed
 
 However, this function has some issues, for instance, it's limited to slopes where <b>0<=m<=1</b>, which is the 1th octant, and it only works if the delta is greater than zero. In the following images we have two situations and the octants, respectively:
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/screenshots/situations.png "Image 2")
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/situations.png "Image 2")
 
 Where a line between (x1, y1) and (x2, y2) would successfully draw (a) and a line between (x2, y2) and (x1, y1) wouldn't plot.
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/screenshots/octants.png  "Image 3")
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/octants.png  "Image 3")
 
 As we can see the (a) situation happens in the first octant while (b) is at the 7th octant.
 
@@ -240,7 +240,7 @@ So let's use this function to draw lines on all eight octants using the followin
     
 And the eight octants succesfully drawn:
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/screenshots/lines.png "")
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/lines.png "")
 
 #### Color Interpolation
 
