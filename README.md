@@ -1,5 +1,8 @@
 #  Introdução à Computação Gráfica 2018.1
 
+### Contents
+[T1 - Rasterization](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#t1---rasterization)
+
 ## T1 - Rasterization
 ### Introduction
 For this task, we have implemented algorithms to rasterize pixels, lines and triangles on the screen, to simulate access to the video memory a framework was provided by the teacher using OpenGL and GLUT toolkit.
@@ -11,9 +14,18 @@ For this task, we have implemented algorithms to rasterize pixels, lines and tri
 ###### Note: In terms of environment, we've used the Windows operating system and NetBeans IDE with MinGW compiler.
 
 ### Function PutPixel
-This function calculates the offset and draws a single pixel on the screen. A pixel has a pair of coordinates (x,y) and it's RGBA value, which gives it's position and color to be displayed, respectively. In the framework the position on the video memory is simulated by the FBptr pointer where it's position is calculated by:
- `Position = (X*4)+(Y*4*Width)`
- Since every color channel occupies one byte we have to increment the position by one in order to access the next value of RGBA, and thus, the FBptr needs to be called four times:
+This function calculates the offset and draws a single pixel on the screen. A pixel has a pair of coordinates (x,y), and it's color (RGBA) value. On the framework used, a pixel memory position is simulated by the FBptr pointer, and the origin of the X and Y axis is on the window upper-left, and therefore, in order to access the first position the following offset formula is used:
+
+ `Offset = (X*4)+(Y*4*Width)`
+ 
+ Where X and Y is the pixel coordinate and Width is the Window width.
+ 
+ Since every color channel occupies one byte and the RGBA color scheme is composed of four channels we have to increment the position by one in order to access the next color channel:
+ 
+ ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/screenshots/pixel.png)
+ Thus, the FBptr needs to be called four times:
+ 
+ 
  ```C++
  void PutPixel(Pixel *pxl){
     FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 0]  = pxl->getR();
@@ -40,14 +52,15 @@ public:
     //get and set functions omitted
 };
 ```
-So let's assume we want to draw a pixel in the 255, 255 coordinate with a white color (255,255,255,255). Here's the code:
+
+Now let's assume we want to draw a pixel in the 255, 255 coordinate with a white color (255,255,255,255). Here's the code:
 ```C++
 Pixel pxl2(255, 255, 255, 255, 255, 255);
 PutPixel(&pxl2);
 ```
 And the output:
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/screenshots/img001.png "Image 1")
 
-[logo]: https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/screenshots/img001.png "Image 1"
 
 ### Function DrawLine
 This function receives two Pixels and draws a line between them using the Bresenham algorithm. The version of the algorithm seen on class had some limitations, for instance it was limited to slopes where <b>0<=m<=1</b>, thus, the 8th octant. Here's the early version of the code:
