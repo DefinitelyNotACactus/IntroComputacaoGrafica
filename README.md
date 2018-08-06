@@ -5,7 +5,16 @@
 
 ## T1 - Rasterization
 ### Introduction
-For this task, we have implemented algorithms to rasterize pixels, lines and triangles on the screen, to simulate access to the video memory a framework was provided by the teacher using OpenGL and GLUT toolkit.
+For this task, we have implemented algorithms to rasterize pixels, lines and triangles on the screen, in order to simulate access to the video memory a framework was provided by the teacher using OpenGL and GLUT toolkit.
+
+#### Contents
+[1. Introduction](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
+[2. PutPixel](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#function-putpixel) <br>
+[3. DrawLine](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#function-drawline) <br> 
+[3.1 Color Interpolation](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#color-interpolation) <br>
+[4. DrawTriangle](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#function-drawtriangle) <br>
+[5. Conclusion](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#conclusion) <br>
+[6. References](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#references)
 
 #### Requirements
 > * OpenGL 
@@ -18,7 +27,7 @@ This function calculates the offset and draws a single pixel on the screen. A pi
 
  ```C++
  Offset = (X*4)+(Y*4*Width)
- PBptr[Offset] = value
+ PBptr[Offset] = value;
  ```
  
  Where X and Y is the pixel coordinate and Width is the Window width.
@@ -63,7 +72,6 @@ PutPixel(&pxl2);
 And the output:
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/img001.png "Image 1")
-
 ### Function DrawLine
 This function receives two pixels and draws a line between them using the Bresenham algorithm.
 The Bresenham algorithm calculates the position of the next pixel to be drawn using midpoint criteria (Consider a line that intersects two pixels columns, for each column there are two pixels that are closer to the line, one above and the other below):
@@ -101,7 +109,7 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){//parameters changed
 }
 ```
 
-However, this function has some issues, for instance, it's limited to slopes where <b>0<=m<=1</b>, which is the 1th octant, and it only works if the delta is greater than zero. In the following images we have two situations and the octants, respectively:
+However, this code has some limitations, for instance, it's restricted to slopes where <b>0<=m<=1</b>, which is the first octant, and it only works if the delta x is greater than zero. In the following images we have two situations and the octants, respectively:
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/situations.png "Image 2")
 
@@ -109,9 +117,9 @@ Where a line between (x1, y1) and (x2, y2) would successfully draw (a) and a lin
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/octants.png  "Image 3")
 
-As we can see the (a) situation happens in the first octant while (b) is at the 7th octant.
+As we can see the (a) situation happens in the first octant while (b) is at the 5th octant.
 
-In order to fix these issues, we had to consider that not always x1 and y1 will be greater than x2 and y2, respectively. So we had to call the abs() function to dx and dy, and if the value was negative we had to decrement instead of increment. So the code was changed to:
+In order to fix these issues, we have to consider that not always x1 and y1 will be greater than x2 and y2, respectively. So we have to call the abs() function to dx and dy variables, and if dx and/or dy is negative we have to decrement their respective coordinate instead of increment. So the code was changed to:
 ```C++
 void DrawLine(Pixel *pxli, Pixel *pxlf){//parameters changed
     int dx = abs(pxlf->getX() - pxli->getX());
@@ -142,7 +150,7 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){//parameters changed
 }
 ```
 
-Now we can handle the (b) situation seen before, but there's still one case which the line wouldn't draw that is when dy is greater than dx. For this all we have to do is switch the decrement/increment X to Y and vice versa, and the condinitionals as well. So this is how our code ended:
+Now we can handle the (b) situation seen before and negative slopes within the [-1, 0] range, but there's still one case which the line wouldn't draw that is when dy is greater than dx. For this all we have to do is switch the decrement/increment X to Y and vice versa (and the conditionals). So this is how our code ended:
 ```C++
 void DrawLine(Pixel *pxli, Pixel *pxlf){
     int d, incr_e, incr_ne, dx, dy;
@@ -256,4 +264,5 @@ And the eight octants succesfully drawn:
 
 ### References
 
-[The Bresenham Line-Drawing Algorithm](https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html)
+[The Bresenham Line-Drawing Algorithm](https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html)<br>
+[Using freeglut or GLUT with MinGW](https://www.transmissionzero.co.uk/computing/using-glut-with-mingw/)
