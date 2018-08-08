@@ -5,7 +5,7 @@
 #include "Pixel.h"
 
 //*****************************************************************************
-// Defina aqui as suas funções gráficas
+// Defina aqui as suas funÃ§Ãµes grÃ¡ficas
 //*****************************************************************************
 
 /**
@@ -25,11 +25,23 @@ void PutPixel(Pixel *pxl){
  * @param *pxlf The last pixel
  */
 void DrawLine(Pixel *pxli, Pixel *pxlf){
-    int d, incr_e, incr_ne, dx, dy;
+    int d, incr_e, incr_ne, dx, dy, dr, dg, db, da, Dr, Dg, Db, Da, R, G, B, A,vr,vg,vb,va;
     Pixel newPixel = *pxli;
     PutPixel(&newPixel);
     dx = abs(pxlf->getX() - newPixel.getX());
     dy = abs(pxlf->getY() - newPixel.getY());
+    dr = abs(pxlf->getR() - newPixel.getR());
+    dg = abs(pxlf->getG() - newPixel.getG());
+    db = abs(pxlf->getB() - newPixel.getB());
+    da = abs(pxlf->getA() - newPixel.getA());
+    vr = dr;
+    vg = dg;
+    vb = db;
+    va = da;
+    Da = d/da;
+    Dr = d/dr;
+    Dg = d/dg;
+    Db = d/db;
     if(dx >= dy){
         d = 2 * dy - dx;
         incr_e = 2 * dy;
@@ -45,11 +57,99 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){
                     newPixel.incrementY();
                 }
             }
-            if(pxli->getX() > pxlf->getX()){
+                if(pxli->getX() > pxlf->getX()){
                 newPixel.decrementX();
             } else {
                 newPixel.incrementX();
             }
+                if(pxli->getR() > pxlf->getR()){
+                    R = pxlf->getR();
+                       if(R == Dr){
+                    newPixel.decrementR();
+                    R--;
+                    vr = vr - Dr;
+                    }
+                    else{
+                        R--;
+                    }
+                } else {
+                    R = pxli->getR();
+                       if(R == Dr){
+                    newPixel.incrementR();
+                    R++;
+                    vr = vr + Dr;
+                    }
+                    else{
+                        R++;
+                    }
+                }
+            if(pxli->getG() > pxlf->getG()){
+                    G = pxlf->getG();
+                       if(G == Dg){
+                    newPixel.decrementG();
+                    G--;
+                    vg = vg - Dg;
+                    }
+                    else{
+                        G--;
+                    }
+                } else {
+                    G = pxli->getG();
+                       if(G == Dg){
+                    newPixel.incrementG();
+                    G++;
+                    vg = vg + Dg;
+                    }
+                    else{
+                        G++;
+                    }
+                }
+            if(pxli->getB() > pxlf->getB()){
+                    B = pxlf->getB();
+                       if(B == Db){
+                    newPixel.decrementB();
+                    B--;
+                    vb = vb - Db;
+                    }
+                    else{
+                        B--;
+                    }
+                  
+                    
+                } else {
+                    B = pxli->getB();
+                       if(B == Db){
+                    newPixel.incrementB();
+                    B++;
+                    vb = vb + Db;
+                    }
+                    else{
+                        B++;
+                    }
+                }
+            if(pxli->getA() > pxlf->getA()){
+                    A = pxlf->getA();
+                       if(A == Da){
+                    newPixel.decrementA();
+                    A--;
+                    va = va - Da;
+                    }
+                    else{
+                        A--;
+                    }
+                  
+                    
+                } else {
+                    A = pxli->getA();
+                       if(A == Da){
+                    newPixel.incrementA();
+                    A++;
+                    va = va + Da;
+                    }
+                    else{
+                        A++;
+                    }
+                }
             PutPixel(&newPixel);
         }
     } else {
@@ -72,6 +172,94 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){
             } else {
                 newPixel.incrementY();
             }
+            if(pxli->getR() > pxlf->getR()){
+                    R = pxlf->getR();
+                       if(R == Dr){
+                    newPixel.decrementR();
+                    R--;
+                    vr = vr - Dr;
+                    }
+                    else{
+                        R--;
+                    }
+                } else {
+                    R = pxli->getR();
+                       if(R == Dr){
+                    newPixel.incrementR();
+                    R++;
+                    vr = vr + Dr;
+                    }
+                    else{
+                        R++;
+                    }
+                }
+            if(pxli->getG() > pxlf->getG()){
+                    G = pxlf->getG();
+                       if(G == Dg){
+                    newPixel.decrementG();
+                    G--;
+                    vg = vg - Dg;
+                    }
+                    else{
+                        G--;
+                    }
+                } else {
+                    G = pxli->getG();
+                       if(G == Dg){
+                    newPixel.incrementG();
+                    G++;
+                    vg = vg + Dg;
+                    }
+                    else{
+                        G++;
+                    }
+                }
+            if(pxli->getB() > pxlf->getB()){
+                    B = pxlf->getB();
+                       if(B == Db){
+                    newPixel.decrementB();
+                    B--;
+                    vb = vb - Db;
+                    }
+                    else{
+                        B--;
+                    }
+                  
+                    
+                } else {
+                    B = pxli->getB();
+                       if(B == Db){
+                    newPixel.incrementB();
+                    B++;
+                    vb = vb + Db;
+                    }
+                    else{
+                        B++;
+                    }
+                }
+            if(pxli->getA() > pxlf->getA()){
+                    A = pxlf->getA();
+                       if(A == Da){
+                    newPixel.decrementA();
+                    A--;
+                    va = va - Da;
+                    }
+                    else{
+                        A--;
+                    }
+                  
+                    
+                } else {
+                    A = pxli->getA();
+                       if(A == Da){
+                    newPixel.incrementA();
+                    A++;
+                    va = va + Da;
+                    }
+                    else{
+                        A++;
+                    }
+                }
             PutPixel(&newPixel);
         }
     }
