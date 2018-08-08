@@ -33,6 +33,38 @@ public:
         x--;
     }
     
+    void incrementR(){
+        r++;
+    }
+    
+    void decrementR(){
+        r--;
+    }
+    
+    void incrementG(){
+        g++;
+    }
+    
+    void decrementG(){
+        g--;
+    }
+    
+    void incrementB(){
+        b++;
+    }
+    
+    void decrementB(){
+        b--;
+    }
+    
+    void incrementA(){
+        a++;
+    }
+    
+    void decrementA(){
+        a--;
+    }
+    
     void setX(int newX){
         x = newX;
     }
