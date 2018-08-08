@@ -251,12 +251,30 @@ And the eight octants succesfully drawn:
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/lines.png "")
 
 #### Color Interpolation
+ 
+ As we can see, the color transition between the center pixel(pxlc) and the remaining pixels is made immediately. The interpolation allow us to to make the color variation visible.
+                                              ""imagem ampliada do centro ""
+ By receiving the RGBA data of the two pixels, we are able to vary the colors as the line is plotted, using the following function,
+ 
+ void Interpolate(Pixel *pxla, Pixel *pxlb, Pixel *pxlc, float t){
+    pxla->setR((pxlb->getR() - pxlc->getR()) * t + pxlc->getR());
+    pxla->setG((pxlb->getG() - pxlc->getG()) * t + pxlc->getG());
+    pxla->setB((pxlb->getB() - pxlc->getB()) * t + pxlc->getB());
+    pxla->setA((pxlb->getA() - pxlc->getA()) * t + pxlc->getA());
+}
 
-(In progress)
 
 ### Function DrawTriangle
 
-(In progress)
+This function draws a triangle, a geometric shape which consists in three lines that share one vertex with one another. By using the DrawLine function we are able to connect the pixels in order to form the triangle,  
+                                  
+void DrawTriangle(Pixel *pxla, Pixel *pxlb, Pixel *pxlc){
+    DrawLine(pxla, pxlb);
+    DrawLine(pxla, pxlc);
+    DrawLine(pxlb, pxlc);
+}
+
+                                                  ""triangle""
 
 ### Conclusion
 
