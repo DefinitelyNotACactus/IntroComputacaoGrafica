@@ -121,7 +121,7 @@ As we can see the (a) situation happens in the first octant while (b) is at the 
 
 In order to fix these issues, we have to consider that not always x1 and y1 will be greater than x2 and y2, respectively. So we have to call the abs() function to dx and dy variables, and if dx and/or dy is negative we have to decrement their respective coordinate instead of increment. So the code was changed to:
 ```C++
-void DrawLine(Pixel *pxli, Pixel *pxlf){//parameters changed
+void DrawLine(Pixel *pxli, Pixel *pxlf){
     int dx = abs(pxlf->getX() - pxli->getX());
     int dy = abs(pxlf->getY() - pxli->getY());
     int d = 2 * dy - dx;
@@ -208,7 +208,7 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){
 
 So let's use this function to draw lines on all eight octants using the following parameters:
 ```C++
-    Pixel pxlc(256, 256, 0, 255, 0, 255);
+    Pixel pxlc(256, 256, 255, 0, 0, 255);
     
     Pixel pxl2(0, 0, 0, 0, 255, 255);
     Pixel pxl3(0, 256, 0, 0, 255, 255);
@@ -246,36 +246,82 @@ So let's use this function to draw lines on all eight octants using the followin
     DrawLine(&pxl17, &pxlc);
 ```
     
-And the eight octants succesfully drawn:
+And the lines succesfully drawn:
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/lines.png "")
+#### Color Interpolation 
+As we can see in the code before, the starting pixel and end pixel (which in our tests was always the central pixel, pxlc) have different RGBA values, however, when we plot the line there's no transition between the colors, and as requested, the color of every pixel along the line must be obtained by linear interpolation. Interpolation consists of "filling a gap" between two numbers. In order to fix this, we have to get the initial and ending pixel colors and use the following formula on the pixel we are currently plotting:
+```C++
+ color = final_color + (initial_color - final_color) * t);
+ ```
+Where t is a value between [0,1] with 0 meaning we are on initial point and 1 on the last point. But how we calculate t? To start, every line has a X and a Y component, on the DrawLine function dx is the line X component and dy the Y component:
+ 
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/components.png "")
 
-#### Color Interpolation
- 
- As we can see, the color transition between the center pixel(pxlc) and the remaining pixels is made immediately. The interpolation allow us to to make the color variation visible.
-                                              ""imagem ampliada do centro ""
- By receiving the RGBA data of the two pixels, we are able to vary the colors as the line is plotted, using the following function,
- 
- void Interpolate(Pixel *pxla, Pixel *pxlb, Pixel *pxlc, float t){
-    pxla->setR((pxlb->getR() - pxlc->getR()) * t + pxlc->getR());
-    pxla->setG((pxlb->getG() - pxlc->getG()) * t + pxlc->getG());
-    pxla->setB((pxlb->getB() - pxlc->getB()) * t + pxlc->getB());
-    pxla->setA((pxlb->getA() - pxlc->getA()) * t + pxlc->getA());
+In the image above, dx and dy forms an angle of 90 degrees, except for the cases when dx or dy is 0 (dt is simply the square root of the non-null component), and we can obtain the line lenght (dt) by using the Pythagorean Theorem:
+ ```C++
+  dt = sqrt((dx*dx)+(dy*dy)); //sqrt = Square root
+  ```
+dt is the numbers of steps we will have taken when the line is fully rasterized, so by creating a new variable called steps we can keep on track of how many steps we've taken, and dividing by dt we have the t, so this is how the function was implemented:
+```C++
+void Interpolate(Pixel *pxla, Pixel *pxli, Pixel *pxlf, float t){
+    pxla->setR(pxlf->getR() + (pxli->getR() - pxlf->getR()) * t);
+    pxla->setG(pxlf->getG() + (pxli->getG() - pxlf->getG()) * t);
+    pxla->setB(pxlf->getB() + (pxli->getB() - pxlf->getB()) * t);
+    pxla->setA(pxlf->getA() + (pxli->getA() - pxlf->getA()) * t);
 }
+```
 
+And we have to call it in the DrawLine as well (parts of the code omitted):
+```C++
+void DrawLine(Pixel *pxli, Pixel *pxlf){
+    //...
+    double dt = sqrt((dx * dx) + (dy * dy));
+    step = 0;
+    if(dx >= dy){
+        //...
+        while(newPixel.getX() != pxlf->getX()){
+            //...
+            Interpolate(&newPixel, pxlf, pxli, step/dt);
+            PutPixel(&newPixel);
+            step++;
+        }
+    } else {
+        //...
+        while(newPixel.getY() != pxlf->getY()){
+            //...
+            Interpolate(&newPixel, pxlf, pxli, step/dt);
+            PutPixel(&newPixel);
+            step++;
+        }
+    }
+}
+```
 
+Now let's test the function using the same parameters to draw in all eight octants, now interpolating colors:
+
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/interpolated.png "")
 ### Function DrawTriangle
-
-This function draws a triangle, a geometric shape which consists in three lines that share one vertex with one another. By using the DrawLine function we are able to connect the pixels in order to form the triangle,  
-                                  
+This function draws a triangle, a geometric shape which consists in three lines that share one vertex with another line. By using the DrawLine function we give three pixels that are the triangle vertices as parameters and we connect them using the DrawLine function:                                   
+```C++                                  
 void DrawTriangle(Pixel *pxla, Pixel *pxlb, Pixel *pxlc){
     DrawLine(pxla, pxlb);
     DrawLine(pxla, pxlc);
     DrawLine(pxlb, pxlc);
 }
+```
 
-                                                  ""triangle""
+To draw a sample triangle, we will use these following parameters:
+```C++
+    Pixel pxla(261, 111, 255, 0, 0, 255);
+    Pixel pxlb(411, 400, 0, 255, 0, 255);
+    Pixel pxlcc(111, 400, 0, 0, 255, 255);
+    
+    DrawTriangle(&pxla, &pxlb, &pxlcc);
+```
+And the output:
 
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/triangle.png "")
 ### Conclusion
 
 (In progress)
@@ -283,4 +329,5 @@ void DrawTriangle(Pixel *pxla, Pixel *pxlb, Pixel *pxlc){
 ### References
 
 [The Bresenham Line-Drawing Algorithm](https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html)<br>
-[Using freeglut or GLUT with MinGW](https://www.transmissionzero.co.uk/computing/using-glut-with-mingw/)
+[Using freeglut or GLUT with MinGW](https://www.transmissionzero.co.uk/computing/using-glut-with-mingw/)<br>
+[The Secrets of Colour Interpolation](https://www.alanzucconi.com/2016/01/06/colour-interpolation/)<br>
