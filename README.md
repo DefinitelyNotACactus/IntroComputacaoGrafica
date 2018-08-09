@@ -311,7 +311,7 @@ void DrawTriangle(Pixel *pxla, Pixel *pxlb, Pixel *pxlc){
 }
 ```
 
-To draw a sample triangle, we will use these following parameters:
+To draw a sample triangle, we will use the following parameters:
 ```C++
     Pixel pxla(261, 111, 255, 0, 0, 255);
     Pixel pxlb(411, 400, 0, 255, 0, 255);
@@ -319,7 +319,7 @@ To draw a sample triangle, we will use these following parameters:
     
     DrawTriangle(&pxla, &pxlb, &pxlcc);
 ```
-And the output:
+And the triangle drawn:
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/triangle.png "")
 ### Conclusion
