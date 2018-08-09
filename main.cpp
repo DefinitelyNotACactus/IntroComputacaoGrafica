@@ -5,9 +5,9 @@
 void MyGlDraw(void)
 {
 	//*************************************************************************
-	// Chame aqui as fun��es do mygl.h
+	// Chame aqui as funções do mygl.h
 	//*************************************************************************
-    Pixel pxlc(256, 256, 0, 255, 0, 255);
+    Pixel pxlc(256, 256, 255, 0, 0, 255);
     
     Pixel pxl2(0, 0, 0, 0, 255, 255);
     Pixel pxl3(0, 256, 0, 0, 255, 255);
@@ -27,7 +27,7 @@ void MyGlDraw(void)
     Pixel pxl16(384, 0, 0, 255, 0, 255);
     Pixel pxl17(128, 0, 0, 255, 0, 255);
     
-    DrawLine(&pxl2, &pxlc);
+    /*DrawLine(&pxl2, &pxlc);
     DrawLine(&pxl3, &pxlc);
     DrawLine(&pxl4, &pxlc);
     DrawLine(&pxl5, &pxlc);
@@ -42,24 +42,24 @@ void MyGlDraw(void)
     DrawLine(&pxl14, &pxlc);
     DrawLine(&pxl15, &pxlc);
     DrawLine(&pxl16, &pxlc);
-    DrawLine(&pxl17, &pxlc);
+    DrawLine(&pxl17, &pxlc);*/
     
-    //Pixel pxl1 = new Pixel(155, 155, 255, 0, 0, 255);
-    //Pixel pxl2()
-    //Pixel pxl2(255, 255, 255, 255, 255, 255);
-    //PutPixel(&pxl2);
-    //Pixel
+    Pixel pxla(261, 111, 255, 0, 0, 255);
+    Pixel pxlb(411, 400, 0, 255, 0, 255);
+    Pixel pxlcc(111, 400, 0, 0, 255, 255);
+    
+    DrawTriangle(&pxla, &pxlb, &pxlcc);
 }
 
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-	// Inicializações.
+	// InicializaÃ§Ãµes.
 	InitOpenGL(&argc, argv);
 	InitCallBacks();
 	InitDataStructures();
 
-	// Ajusta a função que chama as funções do mygl.h
+	// Ajusta a funÃ§Ã£o que chama as funÃ§Ãµes do mygl.h
 	DrawFunc = MyGlDraw;	
 
 	// Framebuffer scan loop.
