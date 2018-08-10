@@ -284,12 +284,11 @@ To draw a sample triangle, we will use the following parameters:
 And the triangle drawn:
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/triangle.png "")
-### Conclusion
 
- The presented work had the intention of inncreasing the knowledge we possess on openGL and as well as a practice of programming. We could also through the end of the work emphasize a few enhancements that could be done in order to improve the calculation, as we have shown before, among those being the restriction to lines which could only be made in the first octant, and it only worked if the delta x is greater than zero, also the inability to fill the triangle with colors.
+### Conclusion
+The presented work had the intention of increasing the knowledge we possess on openGL basics and primitive rasterization routines as a practice of programming. We could also through the end of the work emphasize a few enhancements that could be done in order to improve the code, for instance the inability to fill the triangle, and draw other kinds of objects. 
  
 ### References
-
 [The Bresenham Line-Drawing Algorithm](https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html)<br>
 [Using freeglut or GLUT with MinGW](https://www.transmissionzero.co.uk/computing/using-glut-with-mingw/)<br>
 [The Secrets of Colour Interpolation](https://www.alanzucconi.com/2016/01/06/colour-interpolation/)<br>
