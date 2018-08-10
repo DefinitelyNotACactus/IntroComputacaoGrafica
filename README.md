@@ -85,7 +85,7 @@ d = 2 * dy - dx;
 
 Where dx is the X delta and dy is the y delta, and we repeat this by incrementing until the endpoint is reached.
 
-This algorithm has proven to be efficient to rasterize lines as it doesn't involves operations with floating point, here's the code for this algorithm as seen on class:
+This algorithm has proven to be efficient to rasterize lines as it doesn't involves operations with floating point.
 ```C++
 void DrawLine(Pixel *pxli, Pixel *pxlf){//parameters changed
     int dx = pxlf->getX() - pxli->getX();
@@ -206,45 +206,7 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){
 }
 ```
 
-So let's use this function to draw lines on all eight octants using the following parameters:
-```C++
-    Pixel pxlc(256, 256, 255, 0, 0, 255);
-    
-    Pixel pxl2(0, 0, 0, 0, 255, 255);
-    Pixel pxl3(0, 256, 0, 0, 255, 255);
-    Pixel pxl4(0, 511, 0, 0, 255, 255);
-    Pixel pxl5(256, 511, 0, 0, 255, 255);
-    Pixel pxl6(511, 511, 0, 0, 255, 255);
-    Pixel pxl7(511, 256, 0, 0, 255, 255);
-    Pixel pxl8(511, 0, 0, 0, 255, 255);
-    Pixel pxl9(256, 0, 0, 0, 255, 255);
-
-    Pixel pxl10(0, 128, 0, 255, 0, 255);
-    Pixel pxl11(0, 384, 0, 255, 0, 255);
-    Pixel pxl12(128, 511, 0, 255, 0, 255);
-    Pixel pxl13(384, 511, 0, 255, 0, 255);
-    Pixel pxl14(511, 384, 0, 255, 0, 255);
-    Pixel pxl15(511, 128, 0, 255, 0, 255);
-    Pixel pxl16(384, 0, 0, 255, 0, 255);
-    Pixel pxl17(128, 0, 0, 255, 0, 255);
-    
-    DrawLine(&pxl2, &pxlc);
-    DrawLine(&pxl3, &pxlc);
-    DrawLine(&pxl4, &pxlc);
-    DrawLine(&pxl5, &pxlc);
-    DrawLine(&pxl6, &pxlc);
-    DrawLine(&pxl7, &pxlc);
-    DrawLine(&pxl8, &pxlc);
-    DrawLine(&pxl9, &pxlc);
-    DrawLine(&pxl10, &pxlc);
-    DrawLine(&pxl11, &pxlc);
-    DrawLine(&pxl12, &pxlc);
-    DrawLine(&pxl13, &pxlc);
-    DrawLine(&pxl14, &pxlc);
-    DrawLine(&pxl15, &pxlc);
-    DrawLine(&pxl16, &pxlc);
-    DrawLine(&pxl17, &pxlc);
-```
+So let's use this function to draw lines on all eight octants.
     
 And the lines succesfully drawn:
 
@@ -324,8 +286,8 @@ And the triangle drawn:
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/triangle.png "")
 ### Conclusion
 
-(In progress)
-
+ The presented work had the intention of inncreasing the knowledge we possess on openGL and as well as a practice of programming. We could also through the end of the work emphasize a few enhancements that could be done in order to improve the calculation, as we have shown before, among those being the restriction to lines which could only be made in the first octant, and it only worked if the delta x is greater than zero, also the inability to fill the triangle with colors.
+ 
 ### References
 
 [The Bresenham Line-Drawing Algorithm](https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html)<br>
