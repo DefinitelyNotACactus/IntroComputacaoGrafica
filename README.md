@@ -9,7 +9,7 @@
 For this task, we have implemented algorithms to rasterize pixels, lines and triangles on the screen, in order to simulate access to the video memory a framework was provided by the teacher using OpenGL and GLUT toolkit.
 
 #### Contents
-[1. Introduction](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
+[1. Introduction](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction-1) <br>
 [2. PutPixel](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#function-putpixel) <br>
 [3. DrawLine](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#function-drawline) <br> 
 [3.1 Color Interpolation](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#color-interpolation) <br>
@@ -296,7 +296,17 @@ The presented work had the intention of increasing the knowledge we possess on o
 
 ## T2 - Graphic Pipeline
 ### Introduction
-In the previous task, we have implemented an algorithm to rasterize primitives which is one of the last steps of the graphic pipeline, now we have to implement the full pipeline, by getting the vertices from a object from the object space to the screen space, and then using the rasterization algorithm to display the object on the screen. In order to import a Wavefront .obj file we've useed the [kixor obj loader](http://www.kixor.net/dev/objloader/)
+In the previous task, we have implemented an algorithm to rasterize primitives which is one of the last steps of the graphic pipeline, now we have to implement the full pipeline, by getting the vertices from a object from the object space to the screen space, and then using the rasterization algorithm to display the object on the screen. In order to import a Wavefront .obj file we've used the [kixor obj loader](http://www.kixor.net/dev/objloader/)
+
+#### Contents
+[1. Introduction](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction-1) <br>
+[2. Object Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#object-space) <br>
+[3. Universe Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#universe-space) <br>
+[4. Camera Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#camera-space) <br>
+[5. Clipping Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#clipping-space) <br>
+[6. Canonical Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#canonical-space) <br>
+[7. Conclusion](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#conclusion-1) <br>
+[8. References](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#references-1) <br>
 
 ### Object Space
 (In progress)
@@ -315,13 +325,3 @@ In the previous task, we have implemented an algorithm to rasterize primitives w
 
 ### References
 (In progress)
-
-#### Contents
-[1. Introduction](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
-[2. Object Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
-[3. Universe Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
-[4. Camera Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
-[5. Clipping Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
-[6. Canonical Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
-[7. Conclusion](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
-[8. References](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
