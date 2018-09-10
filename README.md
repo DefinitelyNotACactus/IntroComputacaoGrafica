@@ -1,7 +1,8 @@
 #  Introdução à Computação Gráfica 2018.1
 
 ### Contents
-[T1 - Rasterization](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#t1---rasterization)
+[T1 - Rasterization](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#t1---rasterization)<br>
+[T2 - Graphic Pipeline](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#t2---graphic-pipeline)
 
 ## T1 - Rasterization
 ### Introduction
@@ -292,3 +293,35 @@ The presented work had the intention of increasing the knowledge we possess on o
 [The Bresenham Line-Drawing Algorithm](https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html)<br>
 [Using freeglut or GLUT with MinGW](https://www.transmissionzero.co.uk/computing/using-glut-with-mingw/)<br>
 [The Secrets of Colour Interpolation](https://www.alanzucconi.com/2016/01/06/colour-interpolation/)<br>
+
+## T2 - Graphic Pipeline
+### Introduction
+In the previous task, we have implemented an algorithm to rasterize primitives which is one of the last steps of the graphic pipeline, now we have to implement the full pipeline, by getting the vertices from a object from the object space to the screen space, and then using the rasterization algorithm to display the object on the screen. In order to import a Wavefront .obj file we've useed the [kixor obj loader](http://www.kixor.net/dev/objloader/)
+
+### Object Space
+(In progress)
+
+### Universe Space
+(In progress)
+
+### Camera Space
+(In progress)
+
+### Clipping Space
+(In progress)
+
+### Conclusion
+(In progress)
+
+### References
+(In progress)
+
+#### Contents
+[1. Introduction](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
+[2. Object Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
+[3. Universe Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
+[4. Camera Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
+[5. Clipping Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
+[6. Canonical Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
+[7. Conclusion](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
+[8. References](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction) <br>
