@@ -35,7 +35,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/objTester/list.o \
+	${OBJECTDIR}/objTester/objLoader.o \
+	${OBJECTDIR}/objTester/obj_parser.o \
+	${OBJECTDIR}/objTester/string_extra.o
 
 
 # C Compiler Flags
@@ -65,7 +69,27 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/introcomputacaografica.exe: ${OBJECTF
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/objTester/list.o: objTester/list.cpp
+	${MKDIR} -p ${OBJECTDIR}/objTester
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/objTester/list.o objTester/list.cpp
+
+${OBJECTDIR}/objTester/objLoader.o: objTester/objLoader.cpp
+	${MKDIR} -p ${OBJECTDIR}/objTester
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/objTester/objLoader.o objTester/objLoader.cpp
+
+${OBJECTDIR}/objTester/obj_parser.o: objTester/obj_parser.cpp
+	${MKDIR} -p ${OBJECTDIR}/objTester
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/objTester/obj_parser.o objTester/obj_parser.cpp
+
+${OBJECTDIR}/objTester/string_extra.o: objTester/string_extra.cpp
+	${MKDIR} -p ${OBJECTDIR}/objTester
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/objTester/string_extra.o objTester/string_extra.cpp
 
 # Subprojects
 .build-subprojects:
