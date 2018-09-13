@@ -19,92 +19,80 @@ void MyGlDraw(void)
 	//*************************************************************************
     objLoader *objData = new objLoader();
     objData->load("C:/Users/David/Documents/NetBeans Projects/IntroComputacaoGrafica/monkey_head2.obj");
+    int faceCount = objData->faceCount;
     
-    Pixel *pxla;
-    Pixel *pxlb;
-    Pixel *pxlc;
+    //Object Space
+    glm::mat4 mModel(1);
+
+    //Camera Space
+    glm::vec3 camera_pos(0, 0, 5);
+    glm::vec3 camera_lookat(0, 0, 0);
+    glm::vec3 camera_up(0, 1, 0);
     
-    for(int i = 0; i < objData->faceCount; i++){
-        obj_face* obj = objData->faceList[i];
-        for(int j = 0; j < 3; j++){           
-            glm::vec4 vertex(objData->vertexList[obj->vertex_index[j]]->e[0], objData->vertexList[obj->vertex_index[j]]->e[1], objData->vertexList[obj->vertex_index[j]]->e[2], 1.0f);
-            //printf("%f %f %f %f\n", vertex.x, vertex.y, vertex.z, vertex.w);
-            glm::mat4 mModel(1.0f, 0.0f, 0.0f, 0.0f,
-                             0.0f, 1.0f, 0.0f, 0.0f,
-                             0.0f, 0.0f, 1.0f, 0.0f,
-                             0.0f, 0.0f, 0.0f, 1.0f);
+    glm::vec3 camera_dir = camera_lookat - camera_pos;
+    
+    glm::vec3 z_camera = -glm::normalize(camera_dir);
+    glm::vec3 x_camera = glm::normalize(glm::cross(camera_up, z_camera));
+    glm::vec3 y_camera = glm::normalize(glm::cross(z_camera, x_camera));
 
-            glm::vec3 camera_pos(1.3f, 2.1f, 2.5f);
-            glm::vec3 camera_lookat(0.0f, 0.0f, 0.0f);
-            glm::vec3 camera_up(0.0f, 1.0f, 0.0f);
+    glm::mat4 Bt(x_camera.x, x_camera.y, x_camera.z, 0,
+                 y_camera.x, y_camera.y, y_camera.z, 0,
+                 z_camera.x, z_camera.y, z_camera.z, 0,
+                 0, 0, 0, 1);
+    
+    glm::mat4 T(1, 0, 0, -camera_pos.x,
+                0, 1, 0, -camera_pos.y,
+                0, 0, 1, -camera_pos.z,
+                0, 0, 0, 1);
+    
+    glm::mat4 mView = Bt * T;
+    
+    //Projection
+    float d = 3.0f;
+    
+    glm::mat4 mProjection(1, 0, 0, 0,
+                          0, 1, 0, 0,
+                          0, 0, 1, d,
+                          0, 0, -1/d, 0);
 
-            glm::vec3 camera_dir = camera_lookat - camera_pos;
-            
-            glm::vec3 z_camera = -(camera_dir)/glm::normalize(camera_dir);     
-            glm::vec3 x_camera = glm::cross(camera_up, z_camera)/glm::normalize(glm::cross(camera_up, z_camera));
-            x_camera.y = 0.0f;
-            printf("%f %f %f %f\n", x_camera.x, x_camera.y, x_camera.z, vertex.w);
-            glm::vec3 y_camera = glm::cross(z_camera, x_camera);
-                        printf("%f %f %f %f\n", y_camera.x, y_camera.y, y_camera.z, vertex.w);
+    glm::mat4 mModelViewProjection = mModel * mView * mProjection;
 
-            
-            glm::mat4 Bt(x_camera.x, x_camera.y, x_camera.z, 0.0f,
-                         y_camera.x, y_camera.y, y_camera.z, 0.0f,
-                         z_camera.x, z_camera.y, z_camera.z, 0.0f,
-                         0.0f, 0.0f, 0.0f, 1.0f);
+    //Viewport
+    glm::mat4 S1(1, 0, 0, 0,
+                 0, -1, 0, 0,
+                 0, 0, 1, 0,
+                 0, 0, 0, 1);
 
-            glm::mat4 T(1.0f, 0.0f, 0.0f, -camera_pos.x,
-                        0.0f, 1.0f, 0.0f, -camera_pos.y,
-                        0.0f, 0.0f, 1.0f, -camera_pos.z,
-                        0.0f, 0.0f, 0.0f, 1.0f);
+    T = glm::mat4(1, 0, 0, 1,
+                  0, 1, 0, 1,
+                  0, 0, 1, 0,
+                  0, 0, 0, 1);
 
-            glm::mat4 mView = Bt * T;
-
-            float d = 1.0f;
-
-            glm::mat4 mProjection(1.0f, 0.0f, 0.0f, 0.0f,
-                                  0.0f, 1.0f, 0.0f, 0.0f,
-                                  0.0f, 0.0f, 1.0f, d,
-                                  0.0f, 0.0f, -(1.0f/d), 0.0f);
-
-            glm::mat4 mModelViewProjection = mProjection * mView * mModel;
-
-            vertex = mModelViewProjection * vertex;
-            vertex = vertex/vertex.w;
-            //printf("%f %f %f %f\n", vertex.x, vertex.y, vertex.z, vertex.w);
-
-            glm::mat4 S1(1.0f, 0.0f, 0.0f, 0.0f,
-                         0.0f, -1.0f, 0.0f, 0.0f,
-                         0.0f, 0.0f, 1.0f, 0.0f,
-                         0.0f, 0.0f, 0.0f, 1.0f);
-
-            T = glm::mat4(1.0f, 0.0f, 0.0f, 1.0f,
-                          0.0f, 1.0f, 0.0f, 1.0f,
-                          0.0f, 0.0f, 1.0f, 0.0f,
-                          0.0f, 0.0f, 0.0f, 1.0f);
-
-            glm::mat4 S2((IMAGE_WIDTH-1.0f)/2.0f, 0.0f, 0.0f, 0.0f,
-                         0.0f, (IMAGE_HEIGHT-1.0f)/2.0f, 0.0f, 0.0f,
-                         0.0f, 0.0f, 1.0f, 0.0f,
-                         0.0f, 0.0f, 0.0f, 1.0f);
-
-            glm::mat4 mViewport = S2 * T * S1;
-
-            vertex = mViewport * vertex;
-            
-            switch(j%3){
-                case 0:
-                    pxla = new Pixel((int) vertex.x, (int) vertex.y, 0, 255, 0, 255);
-                    break;
-                case 1:
-                    pxlb = new Pixel((int) vertex.x, (int) vertex.y, 0, 255, 0, 255);
-                    break;
-                case 2:
-                    pxlc = new Pixel((int) vertex.x, (int) vertex.y, 0, 255, 0, 255);
-                    break;
-            }
+    glm::mat4 S2((IMAGE_WIDTH-1)/2, 0, 0, 0,
+                 0, (IMAGE_HEIGHT-1)/2, 0, 0,
+                 0, 0, 1, 0,
+                 0, 0, 0, 1);
+    
+    glm::mat4 mViewport = S1 * T * S2;
+    
+    glm::vec4 vertices[3];
+    
+    //Get the faces
+    for(int i = 0; i < faceCount; i++){
+        obj_face *o = objData->faceList[i];
+        for(int j = 0; j < 3; j++){
+            //Get the vertex
+            glm::vec4 aux(objData->vertexList[o->vertex_index[j]]->e[0], objData->vertexList[o->vertex_index[j]]->e[1], objData->vertexList[o->vertex_index[j]]->e[2], 1);
+            //Move it to camera space
+            aux = aux * mModelViewProjection;
+            //Homogenize
+            aux = aux/aux.w;
+            //Move it to clipping space
+            aux = glm::round(aux * mViewport);
+            vertices[j] = aux;
         }
-        DrawTriangle(pxla, pxlb, pxlc);
+        //Draw the face
+        DrawTriangle(new Pixel(vertices[0].x, vertices[0].y, 255, 255, 255, 255), new Pixel(vertices[1].x, vertices[1].y, 255, 255, 255, 255), new Pixel(vertices[2].x, vertices[2].y, 255, 255, 255, 255));
     }
 }
 
