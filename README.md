@@ -369,6 +369,9 @@ Now let's rotate our head by 45 degrees about the X axis, here's our matrix:
 ```
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/rotated.png "")
 
+And a demonstration using other model (hat.Obj) rotating about the Y axis:
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/rotation.gif "")
+
 #### Translation
 A translation transformation consists on moving the object, however, this transformation is an affine transformation and to represent it in a matrix we need to do a linear transformation to a space that have N+1 dimension, followed by a translation:
 
@@ -406,5 +409,5 @@ This assignment has helped us to understand the steps of the graphic pipeline, a
 
 ### References
 [Shear](http://mathworld.wolfram.com/Shear.html)<br>
-[3D Transformation]](https://www.tutorialspoint.com/computer_graphics/3d_transformation.htm)<br>
+[3D Transformation](https://www.tutorialspoint.com/computer_graphics/3d_transformation.htm)<br>
 Content seen on the ICG class. (Teacher Christian Azambuja)
