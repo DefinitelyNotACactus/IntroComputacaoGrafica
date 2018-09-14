@@ -297,7 +297,7 @@ Content seen on the ICG class. (Teacher Christian Azambuja)
 
 ## T2 - Graphic Pipeline
 ### Introduction
-In the previous task, we have implemented an algorithm to rasterize primitives which is one of the last steps of the graphic pipeline, now we have to implement the full pipeline, by getting the vertices from a object from the object space and take them to the screen space, by doing a series of transformations, and then using the rasterization algorithm to display the object on the screen. In order to import a Wavefront .obj file we've used the [kixor obj loader](http://www.kixor.net/dev/objloader/)
+In the previous task, we have implemented an algorithm to rasterize primitives which is one of the last steps of the graphic pipeline, now we have to implement the full pipeline, by getting vertices from a object at object space and take them to screen space, by doing a series of transformations, and then using the rasterization algorithm implemented before to display the object on screen. In order to import a Wavefront .obj file we've used the [kixor obj loader](http://www.kixor.net/dev/objloader/)
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/pipeline.png "")
 
@@ -312,13 +312,13 @@ In the previous task, we have implemented an algorithm to rasterize primitives w
 [8. References](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#references-1) <br>
 
 ### Object Space to Universe Space
-The first transformation consists in taking the vertices, originally at the object space, to the universe space, at this step we can apply some geometric tansformations to the object and in the end we get the model matrix. Since some of the transformations we will see cannot be represented by a matrix we have to use the homogenous coordinates.
+The first transformation consists in taking vertices, originally at object space, to universe space, at this step we can apply some geometric tansformations to the object and in at end we get the Model matrix. Since some of the transformations we will see cannot be represented by a matrix we have to use homogenous coordinates.
 
-Note: before/after pictures on this section have been taken after all the pipeline steps were implemented.
+Note: before/after pictures on this section have been taken after all pipeline steps were implemented.
 
 #### Geometric Transformations
 #### Scale
-This transformation changes the object vertices by a scale factor, it can change length and direction. The matrix form for this transformation is:
+This transformation changes vertices by a scale factor, it can change length and direction. The matrix form for this transformation is:
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/scale.png "")
 
@@ -340,7 +340,7 @@ A shear fixes all the points along a given line L and shifts the others by a dis
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/shear.png "")
 
-To demonstrate this transformation we will, change our object a amount proportional to 1 unit of Y:
+To demonstrate this transformation we will change our object a amount proportional to 1 unit of Y:
 ```C++
     glm::mat4 shear(1, 1, 0, 0,
                     0, 1, 0, 0,
@@ -375,7 +375,7 @@ And a demonstration using other model (hat.Obj) rotating about the Y axis:
  </p>
 
 #### Translation
-A translation transformation consists on moving the object, however, this transformation is an affine transformation and to represent it in a matrix we need to do a linear transformation to a space that have N+1 dimension, followed by a translation:
+A translation transformation consists on moving vertices, however, this transformation is an affine transformation and to represent it in a matrix we need to do a linear transformation to a space that have N+1 dimension, followed by a translation:
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/translate.png "")
 
@@ -391,36 +391,36 @@ To demonstrate this, we will translate the head by 1 in the X axis:
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/translated.png "")
 
 #### Composing transformations
-The representation of geometric transformations with matrices allows the composition of them using matrix product. However, since the matrix product is not comutative, the order of them matters, the most to the right matrix will be applied first.
+The representation of geometric transformations with matrices allows the composition of them using matrix product. However, since the matrix product is not comutative, order of multiplication matters, the most to the right matrix will be applied first.
 (Note: In the glm library the most the left matrix is applied first.)
 
 ### Universe Space to Camera Space
-At this stage of the graphic pipeline, we have to change the vertices from a coordinate system to another, in this case, the camera space with a change of basis. In the end of this transformation we get the View matrix which contains a rotation and a translation.
+At this stage of the graphic pipeline, we have to change vertices from a coordinate system to another, in this case, to camera space, by doing a change of basis. In the end of this transformation we get the View matrix which contains a rotation and a translation.
 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/basis.png "")
 
-The new basis need to have linear independence, orthogonality and needs to be a orthonormal basis. To build this basis we need to receive three parameters (Position, Look at, Up). The position is where the camera is located at the universe space, while the Look At is where the camera is looking at and the up is the unit vector at the Y axis. Let's assume we want to create a camera looking at the origin while located at the P = (0,0,3). Our parameters would be:
+The new basis need to have linear independence, orthogonality and needs to be a orthonormal basis. To build this basis we need to receive three parameters (Position, Look at, Up). 
+Position is where the camera is located at universe space, while Look At is where camera is looking at and Up is the unit vector at the Y axis (for this case). 
+Let's assume we want to create a camera looking at the origin while located at P = (0,0,3). Our parameters would be:
 ```C++
     glm::vec3 camera_pos(0, 0, 3);
     glm::vec3 camera_lookat(0, 0, 0);
     glm::vec3 camera_up(0, 1, 0);
 ```
 
-The camera's direction is at the opposite side of it's z axis. So we have to subtract the Look at with the position vector:
+The camera's direction is at the opposite side of it's z axis of the basis. So we have to subtract the Look at with the position vector:
 ```C++
     glm::vec3 camera_dir = camera_lookat - camera_pos;
 ```
 
-However this stage is not done yet, after this we have to get the (X,Y,Z) of the new basis:
-```C++
-    glm::vec3 camera_dir = camera_lookat - camera_pos;
-    
+However this stage is not done yet, after this we have to get the (X,Y,Z) of the new basis by doing some operations:
+```C++   
     glm::vec3 z_camera = -glm::normalize(camera_dir);
     glm::vec3 x_camera = glm::normalize(glm::cross(camera_up, z_camera));
     glm::vec3 y_camera = glm::normalize(glm::cross(z_camera, x_camera));
 ```
 
-We can now create the View matrix, which is composed by a rotation matrix Bt and a translation matrix T:
+We now have an Orthonormal basis, and thus, we are able to create the View matrix, which is composed by a rotation matrix Bt and a translation matrix T:
 ```C++
     glm::mat4 Bt(x_camera.x, x_camera.y, x_camera.z, 0,
                  y_camera.x, y_camera.y, y_camera.z, 0,
@@ -434,34 +434,34 @@ We can now create the View matrix, which is composed by a rotation matrix Bt and
     
     glm::mat4 mView = Bt * T;
 ```    
-### Camera Space to Clipping Space
-After building the View matrix, we now move to the clipping space where triangles outside the frustum are cut into smaller triangles. At this stage we get the Projection matrix.
 
-To build the Projection matrix, we have to move the camera a distance d on the positive direction of Z and project a P point at the camera space on the view plane, with this we can find the coordinates of P on the clipping space and represent it with a matrix:
+### Camera Space to Clipping Space
+After building the View matrix, we now move to clipping space. This stage creates a perspective projection on the scene, making closer vertices look bigger and farther vertices smaller. At the end of this step we get the Projection matrix
+
+To build the Projection matrix, we have to move the camera a distance d on the positive direction of Z if it's at origin, where the View plane is located at, suppose there's a point P on camera space, we translate it to View plane, and apply the Projection matrix, which can be built by triangule similarity:
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/clipping.png "")
 
 ```C++
-    p(x,y,z,1);
-    //Parts of the code omitted
-    float d = 1.0f;
+    float d = 1.0f;//distance
     
     glm::mat4 mP(1, 0, 0, 0,
                  0, 1, 0, 0,
                  0, 0, 1, 0,
-                 0, 0, -1/d, 0); 
-    p = p * mP;                      
+                 0, 0, -1/d, 0);                     
 ```
 
-However, we still need to apply a translation of d units on P's Z coordinate, to move the camera back to the origin, we can do the product of the mP and mT matrices and combine them into a single matrix, the Projection matrix, after this we do the product of Model, View and Project matrices(in this order!) to get the ModelViewProjection matrix:
+However, we still need to apply a translation of d units on P's Z coordinate if the camera is not at origin, so our matrix will be the product of mP and mT matrices, after this we do the product of Model, View and Projection matrices(in this order!) to get the ModelViewProjection matrix:
 ```C++
-    glm::mat4 mProjection(1, 0, 0, 0,
-                          0, 1, 0, 0,
-                          0, 0, 1, d,
-                          0, 0, -1/d, 0);
-
+    glm::mat4 mT(1, 0, 0, 0,
+                 0, 1, 0, 0,
+                 0, 0, 1, d,
+                 0, 0, 0, 0); 
+                 
+    glm::mat4 mProjection = mP * mT;
+    
     glm::mat4 mModelViewProjection = mModel * mView * mProjection;
 ```
-After this step, the W coordinate may have a value different than 1.
+After this step, the W coordinate may have a value different than 1. For example, applying it to the monkey_heade.obj .
 
 ### Clipping Space to Canonical Space
 The canonical space consists of a cube limited by unit coordinates, it contains our scene. To do this we have to define a bounding volume around the scene somehow in the camera space, the volume will become the canonical space. This is done in two steps:
@@ -478,7 +478,7 @@ The canonical space consists of a cube limited by unit coordinates, it contains 
 (In progress)
 
 ### Conclusion
-This assignment has helped us to understand the steps of the graphic pipeline, how to implement it and the use of .obj files, there's some improvements that can be done, for instance, the triangles drawn are not filled. In terms of difficulties found, we had some issues at using the glm library, for instance the product of matrices is done in a opposite order and the glm::normalize() function needs to be called before the glm::cross() when getting the camera vectors.
+This assignment has helped us to understand the steps of the graphic pipeline, how to implement it, use of .obj files and the glm library. There's some improvements that can be done, for instance, the triangles drawn are not filled, which can make visualization harder in some cases. In terms of difficulties found, we had some issues at using the glm library, for instance the product of matrices is done in a opposite order and the glm::normalize() function needs to be called before the glm::cross() when getting the camera vectors.
 
 ### References
 [Shear](http://mathworld.wolfram.com/Shear.html)<br>
