@@ -293,35 +293,118 @@ The presented work had the intention of increasing the knowledge we possess on o
 [The Bresenham Line-Drawing Algorithm](https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html)<br>
 [Using freeglut or GLUT with MinGW](https://www.transmissionzero.co.uk/computing/using-glut-with-mingw/)<br>
 [The Secrets of Colour Interpolation](https://www.alanzucconi.com/2016/01/06/colour-interpolation/)<br>
+Content seen on the ICG class. (Teacher Christian Azambuja)
 
 ## T2 - Graphic Pipeline
 ### Introduction
-In the previous task, we have implemented an algorithm to rasterize primitives which is one of the last steps of the graphic pipeline, now we have to implement the full pipeline, by getting the vertices from a object from the object space to the screen space, and then using the rasterization algorithm to display the object on the screen. In order to import a Wavefront .obj file we've used the [kixor obj loader](http://www.kixor.net/dev/objloader/)
+In the previous task, we have implemented an algorithm to rasterize primitives which is one of the last steps of the graphic pipeline, now we have to implement the full pipeline, by getting the vertices from a object from the object space and take them to the screen space, by doing a series of transformations, and then using the rasterization algorithm to display the object on the screen. In order to import a Wavefront .obj file we've used the [kixor obj loader](http://www.kixor.net/dev/objloader/)
+
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/pipeline.png "")
 
 #### Contents
 [1. Introduction](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#introduction-1) <br>
-[2. Object Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#object-space) <br>
-[3. Universe Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#universe-space) <br>
-[4. Camera Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#camera-space) <br>
-[5. Clipping Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#clipping-space) <br>
-[6. Canonical Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#canonical-space) <br>
+[2. Object Space to Universe Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#object-space-to-universe-space) <br>
+[3. Universe Space to Camera Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#universe-space-to-camera-space) <br>
+[4. Camera Space to Clipping Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#camera-space-to-clipping-space) <br>
+[5. Clipping Space to Canonical Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#clipping-space-to-canonical-space) <br>
+[6. Canonical Space to Screen Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#canonical-space-to-screen-space) <br>
 [7. Conclusion](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#conclusion-1) <br>
 [8. References](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#references-1) <br>
 
-### Object Space
+### Object Space to Universe Space
+The first transformation consists in taking the vertices, originally at the object space, to the universe space, at this step we can apply some geometric tansformations to the object and in the end we get the model matrix. Since some of the transformations we will see cannot be represented by a matrix we have to use the homogenous coordinates.
+
+Note: before/after pictures on this section have been taken after all the pipeline steps were implemented.
+
+#### Geometric Transformations
+#### Scale
+This transformation changes the object vertices by a scale factor, it can change length and direction. The matrix form for this transformation is:
+
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/scale.png "")
+
+Let's assume we want to shrink our object by a factor of two, the matrix will be:
+```C++
+    glm::mat4 scale(0.5, 0, 0, 0,
+                    0, 0.5, 0, 0,
+                    0, 0, 0.5, 0,
+                    0, 0, 0, 1);
+                    
+    mModel = mModel * scale;             
+```
+And the before and after the transformation :
+
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/scaled.png "")
+
+#### Shear
+A shear fixes all the points along a given line L and shifts the others by a distance proportional to their perpendicular distance from L.
+
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/shear.png "")
+
+To demonstrate this transformation we will, change our object a amount proportional to 1 unit of Y:
+```C++
+    glm::mat4 shear(1, 1, 0, 0,
+                    0, 1, 0, 0,
+                    0, 1, 1, 0,
+                    0, 0, 0, 1);
+                    
+    mModel = mModel * shear;             
+```
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/sheared.png "")
+
+#### Rotation
+This transformation rotates the object by a given angle counterclockwise around the coordinate system origin and about an axis. In the 3D space we have three possibilities of rotations (about the X, Y or Z axis):
+
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/rotation.png "")
+
+Now let's rotate our head by 45 degrees about the X axis, here's our matrix:
+```C++
+    #define PI 3.14159265
+    
+    float theta = 45.0f;
+    glm::mat4 rotation(1, 0, 0, 0,
+                       0, cos((theta * PI)/ 180), -sin((theta * PI)/ 180), 0,
+                       0, sin((theta * PI)/ 180), cos((theta * PI)/ 180), 0,
+                       0, 0, 0, 1);
+    mModel = mModel * shear;             
+```
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/rotated.png "")
+
+#### Translation
+A translation transformation consists on moving the object, however, this transformation is an affine transformation and to represent it in a matrix we need to do a linear transformation to a space that have N+1 dimension, followed by a translation:
+
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/translate.png "")
+
+To demonstrate this, we will translate the head by 1 in the X axis:
+```C++
+    glm::mat4 shear(1, 1, 0, 0,
+                    0, 1, 0, 0,
+                    0, 1, 1, 0,
+                    0, 0, 0, 1);
+                    
+    mModel = mModel * shear;             
+```
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/translated.png "")
+
+#### Composing transformations
+The representation of geometric transformations with matrics allows the composition of them using matrix product. However, since the matrix product is not comutative, the order of them matters, the most to the right matrix will be applied first.
+(Note: In the glm library the most the left matrix is applied first.)
+
+### Universe Space to Camera Space
 (In progress)
 
-### Universe Space
+### Camera Space to Clipping Space
 (In progress)
 
-### Camera Space
+### Clipping Space to Canonical Space
 (In progress)
 
-### Clipping Space
+### Canonical Space to Screen Space
 (In progress)
 
 ### Conclusion
-(In progress)
+This assignment has helped us to understand the steps of the graphic pipeline, and the use of .obj files, there's some improvements that can be done, for instance, the triangles drawn are not filled. In terms of difficulties found, at first we had some issues at using the glm library, for instance the matrix product is done in a opposite order and the glm::normalize() function needs to be called before the glm::cross() when getting the camera vectors.
 
 ### References
-(In progress)
+[Shear](http://mathworld.wolfram.com/Shear.html)<br>
+[3D Transformation]](https://www.tutorialspoint.com/computer_graphics/3d_transformation.htm)<br>
+Content seen on the ICG class. (Teacher Christian Azambuja)
