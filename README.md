@@ -308,7 +308,7 @@ In the previous task, we have implemented an algorithm to rasterize primitives w
 [4. Camera Space to Clipping Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#camera-space-to-clipping-space) <br>
 [5. Clipping Space to Canonical Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#clipping-space-to-canonical-space) <br>
 [6. Canonical Space to Screen Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#canonical-space-to-screen-space) <br>
-[7. Results and Comparison with a OpenGL application](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#results-and-comparison-with-a-opengl-application)
+[7. Results and Comparison with a OpenGL application](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#results-and-comparison-with-a-opengl-application) <br>
 [8. Conclusion](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#conclusion-1) <br>
 [9. References](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#references-1) <br>
 
