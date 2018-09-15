@@ -8,12 +8,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/mygl.h</file>
-            <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/objTester/objTester.cpp</file>
+            <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/definitions.h</file>
             <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/Pixel.h</file>
             <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/main.cpp</file>
-            <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/objTester/objLoader.cpp</file>
-            <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/objTester/objLoader.h</file>
-            <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/objTester/obj_parser.cpp</file>
+            <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/objTester/obj_parser.h</file>
             <file>file:/C:/Users/David/Documents/NetBeans%20Projects/IntroComputacaoGrafica/main.h</file>
         </group>
     </open-files>

@@ -8,6 +8,17 @@
 //*****************************************************************************
 // Defina aqui as suas funÃ§Ãµes grÃ¡ficas
 //*****************************************************************************
+
+void ClearScreen(){
+    for(int i = 0; i < IMAGE_HEIGHT; i++){
+        for(int j = 0; j < IMAGE_WIDTH; j++){
+            FBptr[i*4 + j*4*IMAGE_WIDTH + 0] = 0;
+            FBptr[i*4 + j*4*IMAGE_WIDTH + 1] = 0;
+            FBptr[i*4 + j*4*IMAGE_WIDTH + 2] = 0;
+            FBptr[i*4 + j*4*IMAGE_WIDTH + 3] = 255;
+        }
+    }
+}
 void Interpolate(Pixel *pxla, Pixel *pxlb, Pixel *pxlc, float t){
     pxla->setR((pxlb->getR() - pxlc->getR()) * t + pxlc->getR());
     pxla->setG((pxlb->getG() - pxlc->getG()) * t + pxlc->getG());

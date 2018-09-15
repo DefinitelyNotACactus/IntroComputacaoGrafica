@@ -22,6 +22,7 @@
       </logicalFolder>
       <itemPath>Pixel.h</itemPath>
       <itemPath>definitions.h</itemPath>
+      <itemPath>loader.cpp</itemPath>
       <itemPath>main.h</itemPath>
       <itemPath>mygl.h</itemPath>
     </logicalFolder>
@@ -125,6 +126,8 @@
       <item path="Pixel.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="definitions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="loader.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
