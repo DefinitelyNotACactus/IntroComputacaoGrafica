@@ -308,8 +308,9 @@ In the previous task, we have implemented an algorithm to rasterize primitives w
 [4. Camera Space to Clipping Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#camera-space-to-clipping-space) <br>
 [5. Clipping Space to Canonical Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#clipping-space-to-canonical-space) <br>
 [6. Canonical Space to Screen Space](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#canonical-space-to-screen-space) <br>
-[7. Conclusion](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#conclusion-1) <br>
-[8. References](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#references-1) <br>
+[7. Results and Comparison with a OpenGL application](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#results-and-comparison-with-a-opengl-application)
+[8. Conclusion](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#conclusion-1) <br>
+[9. References](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica#references-1) <br>
 
 ### Object Space to Universe Space
 The first transformation consists in taking vertices, originally at object space, to universe space, at this step we can apply some geometric tansformations to the object and in at end we get the Model matrix. Since some of the transformations we will see cannot be represented by a matrix we have to use homogenous coordinates.
@@ -436,11 +437,12 @@ We now have an Orthonormal basis, and thus, we are able to create the View matri
 ```    
 
 ### Camera Space to Clipping Space
-After building the View matrix, we now move to clipping space. This stage creates a perspective projection on the scene, making closer vertices look bigger and farther vertices smaller. At the end of this step we get the Projection matrix
+After building the View matrix, we now move to clipping space. At the end of this step we get the Projection matrix
 
-To build the Projection matrix, we have to move the camera a distance d on the positive direction of Z if it's at origin, where the View plane is located at, suppose there's a point P on camera space, we translate it to View plane, and apply the Projection matrix, which can be built by triangule similarity:
+To build the Projection matrix, we have to move the camera a distance d on the positive direction of Z if it's at origin, the View plane is located at the Z=0 plane, suppose there's a point P on camera space, we translate it to View plane, and apply the Projection matrix, which can be built by triangule similarity:
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/clipping.png "")
 
+The coordinates all have a denominator of (1− z/d), so we can simplify it by mulplying. Ending with this matrix:
 ```C++
     float d = 1.0f;//distance
     
@@ -461,27 +463,115 @@ However, we still need to apply a translation of d units on P's Z coordinate if 
     
     glm::mat4 mModelViewProjection = mModel * mView * mProjection;
 ```
-After this step, the W coordinate may have a value different than 1. For example, applying it to the monkey_heade.obj .
+Note: The homogenous coordinate W may have a value different than 1. For example, applying it to the monkey_heade.obj .
 
 ### Clipping Space to Canonical Space
-The canonical space consists of a cube limited by unit coordinates, it contains our scene. To do this we have to define a bounding volume around the scene somehow in the camera space, the volume will become the canonical space. This is done in two steps:
+The canonical space consists of a cube limited by unit coordinates and located at origin, it contains our scene. To do this we have to define a bounding volume around the scene somehow in the camera space, the volume will become the canonical space. This is done in two steps:
 
-1. Homogenize, we divide the vertex by W.
-2. Multiply by a matrix that contains the translation and scale that defines the canonical cube.
-
+1. Homogenize, we divide vertices by their homogenous coordinate W. This transformation creates a perspective projection on the scene, making closer vertices look bigger and farther vertices look smaller.
+2. Multiply by a matrix that contains the translation and scale that defines the canonical cube. 
 ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/canonical.png "")
 
-(In progress) 
-
+Since our Projection matrix is too simple, the result of homogenization are vertices in a space that is not exactly the canonical, however, perspective projection is still present. At this stage we have only implemented the homogenization.
 
 ### Canonical Space to Screen Space
-(In progress)
+This is our last step before rasterization, here we will take vertices from canonical space to screen space. This is done by multiplying vertices by a matrix that contains scales and translations.
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/screen.png "")
+
+To implement it, we have to build one translation matrix and two scale matrices and put it all together with the product of matrices (Viewport matrix), after this we apply the Viewport matrix to our vertices:
+```C++
+    glm::mat4 S1(1, 0, 0, 0,
+                 0, -1, 0, 0,
+                 0, 0, 1, 0,
+                 0, 0, 0, 1);
+
+    T = glm::mat4(1, 0, 0, 1,
+                  0, 1, 0, 1,
+                  0, 0, 1, 0,
+                  0, 0, 0, 1);
+
+    glm::mat4 S2((IMAGE_WIDTH-1)/2, 0, 0, 0,
+                 0, (IMAGE_HEIGHT-1)/2, 0, 0,
+                 0, 0, 1, 0,
+                 0, 0, 0, 1);
+    
+    glm::mat4 mViewport = S1 * T * S2;
+    
+    vertex = glm::round(vertex * mViewport);
+```
+
+### Results and Comparison with a OpenGL application
+After doing all the steps of the graphic pipeline, we can rasterize vertices on the screen to see the results and compare it with a similar application developed using the OpenGL functions:
+
+Here's the code used in the framework:
+```C++
+glm::vec4 vertices[3];
+for(int i = 0; i < faceCount; i++){
+        obj_face *o = objData->faceList[i];
+        for(int j = 0; j < 3; j++){
+            //Get the vertex
+            glm::vec4 aux(objData->vertexList[o->vertex_index[j]]->e[0], objData->vertexList[o->vertex_index[j]]->e[1], objData->vertexList[o->vertex_index[j]]->e[2], 1);
+            //Move it to clipping space
+            aux = aux * mModelViewProjection;
+            //Homogenize
+            aux = aux/aux.w;
+            //Move it to screen space
+            aux = glm::round(aux * mViewport);
+            vertices[j] = aux;
+        }
+        //Draw the face
+        DrawTriangle(new Pixel(vertices[0].x, vertices[0].y, 255, 255, 255, 255), new Pixel(vertices[1].x, vertices[1].y, 255, 255, 255, 255), new Pixel(vertices[2].x, vertices[2].y, 255, 255, 255, 255));
+    }
+```
+
+Code for OpenGL obj loader (parts of code omitted):
+```C++
+void loadObj()
+{
+    objLoader *objData = new objLoader();
+    objData->load("mario_head.obj");
+    int faceCount = objData->faceCount;
+    object = glGenLists(1);
+    glNewList(object, GL_COMPILE);
+    {
+        glPushMatrix();
+        for(int i = 0; i < faceCount; i++){
+            obj_face *o = objData->faceList[i];
+            glBegin(GL_LINES);
+            glm::vec3 vertices[3];
+            for(int j = 0; j < 3; j++){
+                vertices[j] = glm::vec3(objData->vertexList[o->vertex_index[j]]->e[0], objData->vertexList[o->vertex_index[j]]->e[1], objData->vertexList[o->vertex_index[j]]->e[2]);
+            }
+            glVertex3f(vertices[0].x, vertices[0].y, vertices[0].z);
+            glVertex3f(vertices[1].x, vertices[1].y, vertices[1].z);
+            glEnd();
+            glBegin(GL_LINES);
+            glVertex3f(vertices[0].x, vertices[0].y, vertices[0].z);
+            glVertex3f(vertices[2].x, vertices[2].y, vertices[2].z);
+            glEnd();
+            glBegin(GL_LINES);
+            glVertex3f(vertices[1].x, vertices[1].y, vertices[1].z);
+            glVertex3f(vertices[2].x, vertices[2].y, vertices[2].z);
+            glEnd();
+        }
+        
+    }
+    glPopMatrix();
+    glEndList();
+}
+```
+
+And here's the comparison:
+![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/blob/master/pictures/comparison.png "")
+
+There's some minor differences between them, due to OpenGL camera being different from the camera implemented in the framework.
 
 ### Conclusion
-This assignment has helped us to understand the steps of the graphic pipeline, how to implement it, use of .obj files and the glm library. There's some improvements that can be done, for instance, the triangles drawn are not filled, which can make visualization harder in some cases. In terms of difficulties found, we had some issues at using the glm library, for instance the product of matrices is done in a opposite order and the glm::normalize() function needs to be called before the glm::cross() when getting the camera vectors.
+This assignment has helped us to understand the steps of the graphic pipeline, how to implement it, use of .obj files and the glm library. There's some improvements that can be done, for instance, the triangles drawn are not filled and how to adjust the camera to compare with OpenGL camera, which can make visualization harder in some cases. In terms of difficulties found, we had some issues at using the glm library, for instance the product of matrices is done in a opposite order and the glm::normalize() function needs to be called before the glm::cross() when getting the camera vectors.
 
 ### References
 [Shear](http://mathworld.wolfram.com/Shear.html)<br>
 [3D Transformation](https://www.tutorialspoint.com/computer_graphics/3d_transformation.htm)<br>
-[The Perspective and Orthographic Projection Matrix](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/projection-matrix-GPU-rendering-pipeline-clipping)
+[The Perspective and Orthographic Projection Matrix](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/projection-matrix-GPU-rendering-pipeline-clipping)<br>
+[Models Resource (Addional models used on this assignment)](https://www.models-resource.com/)<br>
 Content seen on the ICG class. (Teacher Christian Azambuja)
