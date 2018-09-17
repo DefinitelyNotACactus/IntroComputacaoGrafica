@@ -30,10 +30,12 @@ void Interpolate(Pixel *pxla, Pixel *pxlb, Pixel *pxlc, float t){
  * @param *pxl The pixel to be drawn 
  */
 void PutPixel(Pixel *pxl){
-    FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 0]  = pxl->getR();
-    FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 1]  = pxl->getG();
-    FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 2]  = pxl->getB();
-    FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 3]  = pxl->getA();
+    if(pxl->getX() >= 0 && pxl->getY() >= 0 && pxl->getX() < IMAGE_WIDTH && pxl->getY() < IMAGE_HEIGHT){
+        FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 0]  = pxl->getR();
+        FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 1]  = pxl->getG();
+        FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 2]  = pxl->getB();
+        FBptr[pxl->getX()*4 + pxl->getY()*4*IMAGE_WIDTH + 3]  = pxl->getA();
+    }
 }
 
 /**

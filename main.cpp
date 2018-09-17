@@ -14,9 +14,14 @@
 #define PI 3.14159265
 
 float theta = 0.0f; //degree
+float omega = 0.0f; //degree
+float lambda = 0.0f; //degree
 //-----------------------------------------------------------------------------
 void MyGlDraw(void)
 {
+	//*************************************************************************
+	// Chame aqui as funções do mygl.h
+	//*************************************************************************
     ClearScreen();
     objLoader *objData = new objLoader();
     objData->load("mario_head.obj");
@@ -38,11 +43,23 @@ void MyGlDraw(void)
                     0, 1, 1, 0,
                     0, 0, 0, 1);
     
-    //Rotation matrix
-    glm::mat4 rotate(cos((theta * PI)/ 180), 0, sin((theta * PI)/ 180), 0,
-                       0, 1, 0, 0,
-                       -sin((theta * PI)/ 180), 0, cos((theta * PI)/ 180), 0,
-                       0, 0, 0, 1);
+    //Rotate Y
+    glm::mat4 rotateY(cos((theta * PI)/ 180), 0, sin((theta * PI)/ 180), 0,
+                      0, 1, 0, 0,
+                      -sin((theta * PI)/ 180), 0, cos((theta * PI)/ 180), 0,
+                      0, 0, 0, 1);
+    
+    //Rotate Z
+    glm::mat4 rotateZ(cos((lambda * PI)/ 180), -sin((lambda * PI)/ 180), 0, 0,
+                      sin((lambda * PI)/ 180), cos((lambda * PI)/ 180), 0, 0,
+                      0, 0, 1, 0,
+                      0, 0, 0, 1);
+    
+    //Rotate X
+    glm::mat4 rotateX(1, 0, 0, 0,
+                      0, cos((omega * PI)/ 180), -sin((omega * PI)/ 180), 0,
+                      0, sin((omega * PI)/ 180), cos((omega * PI)/ 180), 0,
+                      0, 0, 0, 1);
     
     //Translation matrix
     glm::mat4 translate(1, 0, 0, 0,
@@ -51,10 +68,10 @@ void MyGlDraw(void)
                         0, 0, 0, 1);
     
     //mModel = mModel * translate * rotate * shear * scale;
-    mModel = mModel * scale * translate * rotate;
+    mModel = mModel * scale * rotateY * rotateX * rotateZ;
     
     //Camera Space
-    glm::vec3 camera_pos(0, 0, 5);
+    glm::vec3 camera_pos(0, 2, 5);
     glm::vec3 camera_lookat(0, 0, 0);
     glm::vec3 camera_up(0, 1, 0);
     
@@ -77,7 +94,7 @@ void MyGlDraw(void)
     glm::mat4 mView = Bt * T;
     
     //Projection
-    float d = 2.5f;
+    float d = 2.0f;
     
     glm::mat4 mProjection(1, 0, 0, 0,
                           0, 1, 0, 0,
@@ -127,6 +144,30 @@ void MyGlDraw(void)
     //glutTimerFunc(5, timer, 0);
 }
 
+void keyPressed (unsigned char key, int x, int y) 
+{  
+    switch(key){
+        case 'd':
+            theta += 1;
+            break;
+        case 'a':
+            theta -= 1;
+            break;
+        case 'w':
+            omega += 1;
+            break;
+        case 's':
+            omega -= 1;
+            break;
+        case 'q':
+            lambda += 1;
+            break;
+        case 'e':
+            lambda -= 1;
+            break;
+    }
+}  
+
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
@@ -139,8 +180,7 @@ int main(int argc, char **argv)
 	DrawFunc = MyGlDraw;	
 
 	// Framebuffer scan loop.
-        //glutTimerFunc( 5, timer, 0);
-        //glutIdleFunc(idle);
+        glutKeyboardFunc(keyPressed);
 	glutMainLoop();
 
 	return 0;

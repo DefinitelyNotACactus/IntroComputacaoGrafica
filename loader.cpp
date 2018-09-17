@@ -1,13 +1,16 @@
 #include "objTester/objLoader.h"
 
-#include<GL/gl.h>
-#include<GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glut.h>
 #include <GL/glu.h>
 #include <glm/fwd.hpp>
 #include <glm/vec3.hpp>
 #include <glm/glm.hpp>
+#include <stdio.h>
 
 GLuint object;
+float rot = 0.0f;
+int z = 0;
 
 void loadObj()
 {
@@ -48,7 +51,6 @@ void reshape(int w,int h)
     glViewport(0,0,w,h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45, 1, 2.5, 1000.0);
     glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
     glMatrixMode(GL_MODELVIEW);
 }
@@ -57,6 +59,7 @@ void draw()
 {
     glPushMatrix();
     glTranslatef(0,-1,0);
+    glRotatef(rot, 0, 1, 0);
     glColor3f(1.0,1.0,1.0);
     glCallList(object);
     glPopMatrix();
@@ -71,6 +74,27 @@ void display(void)
     glutSwapBuffers();
 }
 
+void keyPressed (unsigned char key, int x, int y) 
+{  
+    switch(key){
+        case 'd':
+            z = 0;
+            rot+=1;
+            break;
+        case 'a':
+            z = 0;
+            rot -= 1;
+            break;
+        case 'w':
+            z = 1;
+            rot+=1;
+            break;
+        case 's':
+            z = 1;
+            rot -= 1;
+            break;
+    }
+}  
 int main(int argc,char **argv)
 {
     glutInit(&argc,argv);
@@ -80,6 +104,7 @@ int main(int argc,char **argv)
     glutCreateWindow("Obj Loader");
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
+    glutKeyboardFunc(keyPressed);
     glutIdleFunc(display);
     loadObj();
     glutMainLoop();
