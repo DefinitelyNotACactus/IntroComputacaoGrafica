@@ -28,14 +28,16 @@ This function calculates the offset and draws a single pixel on the screen. A pi
 
  ```C++
  Offset = (X*4)+(Y*4*Width)
- PBptr[Offset] = value;
+ FBptr[Offset] = value;
  ```
  
  Where X and Y is the pixel coordinate and Width is the Window width.
  
  Since every color channel occupies one byte and the RGBA color scheme is composed of four channels we have to increment the position by one in order to access the next color channel:
+ <p align="center">
+ <img src="https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/pixel.png">
+ </p>
  
- ![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/pixel.png)
  Thus, the FBptr needs to be called four times and the function changes to:
  ```C++
  void PutPixel(Pixel *pxl){
@@ -71,13 +73,17 @@ Pixel pxl2(255, 255, 255, 255, 255, 255);
 PutPixel(&pxl2);
 ```
 And the output:
+ <p align="center">
+ <img src="https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/img001.png">
+ </p>
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/img001.png "Image 1")
 ### Function DrawLine
 This function receives two pixels and draws a line between them using the Bresenham algorithm.
 The Bresenham algorithm calculates the position of the next pixel to be drawn using midpoint criteria (Consider a line that intersects two pixels columns, for each column there are two pixels that are closer to the line, one above and the other below):
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/line.png "")
+ <p align="center">
+ <img src="https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/line.png">
+ </p>
 
 To decide between them, a decision variable d is used:
 ```C++
@@ -112,11 +118,15 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){//parameters changed
 
 However, this code has some limitations, for instance, it's restricted to slopes where <b>0<=m<=1</b>, which is the first octant, and it only works if the delta x is greater than zero. In the following images we have two situations and the octants, respectively:
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/situations.png "Image 2")
+ <p align="center">
+ <img src="https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/situations.png">
+ </p>
 
 Where a line between (x1, y1) and (x2, y2) would successfully draw (a) and a line between (x2, y2) and (x1, y1) wouldn't plot.
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/octants.png  "Image 3")
+ <p align="center">
+ <img src="https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/octants.png">
+ </p>
 
 As we can see the (a) situation happens in the first octant while (b) is at the 5th octant.
 
@@ -211,15 +221,20 @@ So let's use this function to draw lines on all eight octants.
     
 And the lines succesfully drawn:
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/lines.png "")
-#### Color Interpolation 
+ <p align="center">
+ <img src="https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/lines.png">
+ </p>
+ 
+ #### Color Interpolation 
 As we can see in the code before, the starting pixel and end pixel (which in our tests was always the central pixel, pxlc) have different RGBA values, however, when we plot the line there's no transition between the colors, and as requested, the color of every pixel along the line must be obtained by linear interpolation. Interpolation consists of "filling a gap" between two numbers. In order to fix this, we have to get the initial and ending pixel colors and use the following formula on the pixel we are currently plotting:
 ```C++
  color = final_color + (initial_color - final_color) * t);
  ```
 Where t is a value between [0,1] with 0 meaning we are on initial point and 1 on the last point. But how we calculate t? To start, every line has a X and a Y component, on the DrawLine function dx is the line X component and dy the Y component:
  
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/components.png "")
+ <p align="center">
+ <img src="https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/components.png">
+ </p>
 
 In the image above, dx and dy forms an angle of 90 degrees, except for the cases when dx or dy is 0 (dt is simply the square root of the non-null component), and we can obtain the line lenght (dt) by using the Pythagorean Theorem:
  ```C++
@@ -263,7 +278,10 @@ void DrawLine(Pixel *pxli, Pixel *pxlf){
 
 Now let's test the function using the same parameters to draw in all eight octants, now interpolating colors:
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/interpolated.png "")
+ <p align="center">
+ <img src="https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/interpolated.png">
+ </p>
+
 ### Function DrawTriangle
 This function draws a triangle, a geometric shape which consists in three lines that share one vertex with another line. By using the DrawLine function we give three pixels that are the triangle vertices as parameters and we connect them using the DrawLine function:                                   
 ```C++                                  
@@ -284,7 +302,9 @@ To draw a sample triangle, we will use the following parameters:
 ```
 And the triangle drawn:
 
-![alt text](https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/triangle.png "")
+ <p align="center">
+ <img src="https://github.com/DefinitelyNotACactus/IntroComputacaoGrafica/raw/master/pictures/triangle.png">
+ </p>
 
 ### Conclusion
 The presented work had the intention of increasing the knowledge we possess on openGL basics and primitive rasterization routines as a practice of programming. We could also through the end of the work emphasize a few enhancements that could be done in order to improve the code, for instance the inability to fill the triangle, and draw other kinds of objects. 
@@ -293,7 +313,7 @@ The presented work had the intention of increasing the knowledge we possess on o
 [The Bresenham Line-Drawing Algorithm](https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html)<br>
 [Using freeglut or GLUT with MinGW](https://www.transmissionzero.co.uk/computing/using-glut-with-mingw/)<br>
 [The Secrets of Colour Interpolation](https://www.alanzucconi.com/2016/01/06/colour-interpolation/)<br>
-Content seen on the ICG class. (Teacher Christian Azambuja)
+Content seen on the ICG class. (Professor Christian Azambuja)
 
 ## T2 - Graphic Pipeline
 ### Introduction
@@ -574,4 +594,4 @@ This assignment has helped us to understand the steps of the graphic pipeline, h
 [3D Transformation](https://www.tutorialspoint.com/computer_graphics/3d_transformation.htm)<br>
 [The Perspective and Orthographic Projection Matrix](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/projection-matrix-GPU-rendering-pipeline-clipping)<br>
 [Models Resource (Addional models used on this assignment)](https://www.models-resource.com/)<br>
-Content seen on the ICG class. (Teacher Christian Azambuja)
+Content seen on the ICG class. (Professor Christian Azambuja)
